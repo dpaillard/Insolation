@@ -6,7 +6,7 @@
 
 import numpy as np
 import matplotlib.pyplot as plt
-import astro as astro
+import inso.astro as astro
 import inso as inso
 from scipy import optimize
 from operator import itemgetter
@@ -371,7 +371,7 @@ def subplot_lbd_minmaxL(subplt,e,eps):
         subplt.plot([perC2], [lbdC2], 'o',color='k')
         subplt.plot([-perC1], [-lbdC1], 'o',color='k')
         subplt.plot([-perC2], [-lbdC2], 'o',color='k')
-    subplt.set_title(r'e = '+str(e)+'  c = cos($\epsilon$) = '+f"{np.cos(eps):.3f}"+" :"+domain_name)
+    subplt.set_title(f"e = {e}  c = cos($\\epsilon$) = {np.cos(eps):.3f} :{domain_name}")
     subplt.set_xlabel(r'$\varpi$')
     subplt.set_ylabel(r'$\lambda$')
 
@@ -672,47 +672,46 @@ def lambda_minmaxH(ecc,eps,per,critPoints):
         lbd_2 = lbd_minmaxH(ecc,eps,2*np.pi-per,critPoints)
         return np.concatenate( [lbd_1, 0*np.pi-lbd_2] )
 
-'''
-def plot_lbd_minmaxH(e,eps,small = 1e-4):  # small ... to avoid exact boundary values... needs fine tuning...
-    critPoints = lbd_critH(e,np.cos(eps))
-    domainH = critPoints[0]
-    if len(critPoints[1])==0:
-        omCrit = np.array([np.pi/2,3*np.pi/2])
-    else:
-        omCrit0 = mod_2pi_minus_pi_over_2(np.array(critPoints[1])[:,1])
-        omCrit = np.sort(np.concatenate((omCrit0,2*np.pi-omCrit0,[np.pi/2,3*np.pi/2])))
+#def plot_lbd_minmaxH(e,eps,small = 1e-4):  # small ... to avoid exact boundary values... needs fine tuning...
+#    critPoints = lbd_critH(e,np.cos(eps))
+#    domainH = critPoints[0]
+#    if len(critPoints[1])==0:
+#        omCrit = np.array([np.pi/2,3*np.pi/2])
+#    else:
+#        omCrit0 = mod_2pi_minus_pi_over_2(np.array(critPoints[1])[:,1])
+#        omCrit = np.sort(np.concatenate((omCrit0,2*np.pi-omCrit0,[np.pi/2,3*np.pi/2])))
+#
+#    def my_plot_array(f,a,b,n=100,label='',color=""):
+#        x = np.linspace(a,b,n)
+#        n = len(f(a))
+#        y = np.empty([len(x),n])
+#        for i in range(len(x)):
+#            y[i,:] = f(x[i])
+#        for k in range(n):
+#            if color=='':
+#                plt.plot(x,y[:,k],label=label)
+#            else:
+#                plt.plot(x,y[:,k],label=label,color=color)
+#
+#    n = len(omCrit)
+#    for i in range(n-1):
+#        if omCrit[i]+small < omCrit[i+1]-small:
+#            my_plot_array(lambda z: lambda_minmaxH(e,eps,z,critPoints),omCrit[i]+small, omCrit[i+1]-small,color='b')
+#        else:
+#            print("warning: plot domain too small")
+#
+#    om1 = np.linspace(np.pi/2+1e-5,3*np.pi/2-1e-5,100)
+#    lbd0 = list(map(lambda z: lambda_max(e,z)[0],om1))
+#    lbd1 = list(map(lambda z: lambda_max(e,z)[1],om1))
+#    plt.fill_between(om1,lbd0,-np.pi/2,color='pink')
+#    plt.fill_between(om1,lbd1,np.pi/2,color='pink')
+#    plt.axis([np.pi/2, 3*np.pi/2, -np.pi/2, np.pi/2])
+#    plt.title(f"e = {e}  c = cos($\\epsilon$) = {np.cos(eps):.3f} :{domainH}")
+#    plt.xlabel(r'$\varpi$')
+#    plt.ylabel(r'$\lambda$')
+#    plt.show()
+#    return
 
-    def my_plot_array(f,a,b,n=100,label='',color=""):
-        x = np.linspace(a,b,n)
-        n = len(f(a))
-        y = np.empty([len(x),n])
-        for i in range(len(x)):
-            y[i,:] = f(x[i])
-        for k in range(n):
-            if color=='':
-                plt.plot(x,y[:,k],label=label)
-            else:
-                plt.plot(x,y[:,k],label=label,color=color)
-
-    n = len(omCrit)
-    for i in range(n-1):
-        if omCrit[i]+small < omCrit[i+1]-small:
-            my_plot_array(lambda z: lambda_minmaxH(e,eps,z,critPoints),omCrit[i]+small, omCrit[i+1]-small,color='b')
-        else:
-            print("warning: plot domain too small")
-
-    om1 = np.linspace(np.pi/2+1e-5,3*np.pi/2-1e-5,100)
-    lbd0 = list(map(lambda z: lambda_max(e,z)[0],om1))
-    lbd1 = list(map(lambda z: lambda_max(e,z)[1],om1))
-    plt.fill_between(om1,lbd0,-np.pi/2,color='pink')
-    plt.fill_between(om1,lbd1,np.pi/2,color='pink')
-    plt.axis([np.pi/2, 3*np.pi/2, -np.pi/2, np.pi/2])
-    plt.title(r'e = '+str(e)+'  c = cos($\epsilon$) = '+f"{np.cos(eps):.3f}"+" :"+domainH)
-    plt.xlabel(r'$\varpi$')
-    plt.ylabel(r'$\lambda$')
-    plt.show()
-    return
-'''
 def subplot_lbd_minmaxH(subplt,e,eps,small = 1e-4):  # small ... to avoid exact boundary values... needs fine tuning...
     critPoints = lbd_critH(e,np.cos(eps))
     critPts = np.array(critPoints[1])
@@ -752,7 +751,7 @@ def subplot_lbd_minmaxH(subplt,e,eps,small = 1e-4):  # small ... to avoid exact 
     subplt.fill_between(om1,lbd0,-np.pi/2,color='pink')
     subplt.fill_between(om1,lbd1,np.pi/2,color='pink')
     subplt.axis([np.pi/2, 3*np.pi/2, -np.pi/2, np.pi/2])
-    subplt.set_title(r'e = '+str(e)+'  c = cos($\epsilon$) = '+f"{np.cos(eps):.3f}"+" :"+domainH)
+    subplt.set_title(f"e = {e}  c = cos($\\epsilon$) = {np.cos(eps):.3f} :{domainH}")
     subplt.set_xlabel(r'$\varpi$')
     subplt.set_ylabel(r'$\lambda$')
 
